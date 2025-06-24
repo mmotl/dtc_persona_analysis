@@ -192,3 +192,13 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# data directory, used for storing data files
+data/
+
+# macOS system file, used to store custom attributes of a folder
+DS_Store
+
+# Environment variables file, used to store sensitive information like API keys
+.env 
+
