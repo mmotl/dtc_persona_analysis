@@ -19,3 +19,8 @@ Follow the best practices
 - 
 
 the data is anonymized based on a real-world scenario from a former market research project
+
+
+good practices considered:
+- pr-commit webhooks are used to check for large files and private keys not being commited
+ 
