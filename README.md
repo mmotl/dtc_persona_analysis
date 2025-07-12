@@ -14,5 +14,8 @@ Deploy the model in batch, web service or streaming
 Monitor the performance of your model
 Follow the best practices
 
+- created mock data / clustering
+- found best k for kmeans clustering with mlflow experiment tracking
+- 
 
 the data is anonymized based on a real-world scenario from a former market research project

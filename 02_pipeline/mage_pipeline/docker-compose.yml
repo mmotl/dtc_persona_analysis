@@ -1,0 +1,46 @@
+version: '3'
+services:
+  mage_pipe:
+    # Use the latest Mage AI image from Docker Hub
+    image: mageai/mageai:latest
+    container_name: mage_pipeline
+    command: mage start ${PROJECT_NAME}
+    env_file:
+      - .env
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    environment:
+      USER_CODE_PATH: /home/src/${PROJECT_NAME}
+      ENV: ${ENV}
+    ports:
+      - 6789:6789
+    volumes:
+      - .:/home/src/
+    restart: on-failure:5
+
+  mlflow_server:
+    image: ghcr.io/mlflow/mlflow:v2.22.0
+    container_name: mlflow_tracking_server
+    # Expose the MLflow UI port to your local machine
+    ports:
+      - "5005:5000"
+    # Use a named volume to persist all MLflow data (experiments, models, etc.)
+    volumes:
+      - /Users/matthiasmotl/neuefische/repositories/dtc/dtc_persona_analysis/01_model:/mlflow
+    # The command to start the MLflow tracking server inside the container
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:///mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+
+    # Healthcheck ensures the service is ready before other services depend on it
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    restart: on-failure:5
+
