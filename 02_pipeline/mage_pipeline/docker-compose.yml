@@ -24,7 +24,7 @@ services:
     container_name: mlflow_tracking_server
     # Expose the MLflow UI port to your local machine
     ports:
-      - "5005:5000"
+      - "5000:5000"
     # Use a named volume to persist all MLflow data (experiments, models, etc.)
     volumes:
       - /Users/matthiasmotl/neuefische/repositories/dtc/dtc_persona_analysis/01_model:/mlflow

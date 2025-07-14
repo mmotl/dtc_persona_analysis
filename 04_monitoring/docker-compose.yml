@@ -7,6 +7,7 @@ services:
     ports:
       - "8978:8978"
     environment:
+      - CB_SERVER_URL=http://localhost:8978
       - CB_SERVER_NAME=DBeaver
     volumes:
       - dbeaver_data:/opt/cloudbeaver/workspace
