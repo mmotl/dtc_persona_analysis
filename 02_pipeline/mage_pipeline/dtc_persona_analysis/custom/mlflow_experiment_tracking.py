@@ -45,7 +45,6 @@ def transform_custom(data, *args, **kwargs):
     with mlflow.start_run() as parent_run:
     # Iterate over the range of clusters
         for clusters in tqdm(range(2, 11)):
-            print('iteration')
             
             # Start a new MLflow run for each cluster count
             with mlflow.start_run(nested=True): #run_name=f"kmeans_basic_k={C}"):
@@ -81,9 +80,17 @@ def transform_custom(data, *args, **kwargs):
                 mlflow.log_param("n_clusters", clusters)
 
                 # Log the model itself
-                mlflow.set_tag("run_purpose", "pipeline test")
+                mlflow.set_tag("run_purpose", "experiment from pipeline")
+        
+        experiment = mlflow.get_experiment_by_name(experiment_name)
+        runs = mlflow.search_runs(
+                                experiment_ids=[experiment.experiment_id],
+                                order_by=["metrics.silhouette_inertia_ratio DESC"],
+                                max_results=1
+                                )
+        best_run = runs.iloc[0]
 
-    return None
+    return best_run.run_id # Return the ID of the best run
 
 @test
 def test_output(output, *args) -> None:
