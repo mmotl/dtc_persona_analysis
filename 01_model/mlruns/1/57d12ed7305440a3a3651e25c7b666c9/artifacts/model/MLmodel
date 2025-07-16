@@ -1,0 +1,33 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.22
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+is_signature_from_type_hint: false
+mlflow_version: 2.22.0
+model_size_bytes: 3194
+model_uuid: 3015ee2c94054736a0edc5b2e07c452b
+prompts: null
+run_id: 57d12ed7305440a3a3651e25c7b666c9
+signature:
+  inputs: '[{"type": "double", "name": "x1", "required": true}, {"type": "double",
+    "name": "x2", "required": true}, {"type": "double", "name": "x3", "required":
+    true}, {"type": "double", "name": "x4", "required": true}, {"type": "double",
+    "name": "x5", "required": true}, {"type": "double", "name": "x6", "required":
+    true}, {"type": "double", "name": "x7", "required": true}, {"type": "double",
+    "name": "x8", "required": true}, {"type": "double", "name": "x9", "required":
+    true}, {"type": "double", "name": "x10", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int32", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-07-15 13:26:26.967333'

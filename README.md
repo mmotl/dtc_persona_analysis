@@ -28,3 +28,5 @@ the data is anonymized based on a real-world scenario from a former market resea
 good practices considered:
 - pr-commit webhooks are used to check for large files and private keys not being commited
 - 
+
+- outlines are used in the jupyter notebooks for easier navigation
