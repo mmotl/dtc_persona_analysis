@@ -24,7 +24,7 @@ services:
     container_name: mlflow_tracking_server
     # Expose the MLflow UI port to your local machine
     ports:
-      - "5000:5000"
+      - "5050:5000"
     # Use a named volume to persist all MLflow data (experiments, models, etc.)
     volumes:
       - /Users/matthiasmotl/neuefische/repositories/dtc/dtc_persona_analysis/01_model:/mlflow
@@ -44,3 +44,31 @@ services:
       retries: 3
     restart: on-failure:5
 
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "4321:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  dbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: dbeaver
+    ports:
+      - "8978:8978"
+    environment:
+      - CB_SERVER_URL=http://localhost:8978
+      - CB_SERVER_NAME=DBeaver
+    volumes:
+      - dbeaver_data:/opt/cloudbeaver/workspace
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  dbeaver_data:
