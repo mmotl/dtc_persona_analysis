@@ -34,3 +34,5 @@ good practices considered:
 
 future steps:
 - consider timezones in date creation
+To revert your CLI to the previously installed version, you may run:
+$ gcloud components update --version 427.0.0

@@ -13,7 +13,8 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
 import logging
-logging.getLogger("mlflow").setLevel(logging.ERROR) # Suppress the MLflow warning - It only shows warning below the ERROR level.
+# deactivated for debugging reasons
+# logging.getLogger("mlflow").setLevel(logging.ERROR) # Suppress the MLflow warning - It only shows warning below the ERROR level.
 
 
 @custom
@@ -32,7 +33,9 @@ def transform_custom(data, *args, **kwargs):
     path = "../data/test_ref.csv" 
 
     mlflow.set_tracking_uri("http://mlflow_server:5000")
-    # mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    print(f"MLflow tracking URI has been successfully set to: {mlflow.get_tracking_uri()}")
+    
+    # mlflow.set_tracking_uri("sqlite:///mlflow.db") # for local
     mlflow.set_experiment(experiment_name)
 
     # Enable scikit-learn autologging

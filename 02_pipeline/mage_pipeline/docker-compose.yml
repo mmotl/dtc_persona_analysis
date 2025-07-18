@@ -1,17 +1,12 @@
 # cloud version of mage pipeline
-version: '3'
+version: '3.8'
 services:
   mage_pipe:
-    # Use the latest Mage AI image from Docker Hub
-    image: mageai/mageai:latest
-    container_name: mage_pipeline
-    command: mage start ${PROJECT_NAME}
-    env_file:
-      - .env
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    # environment:
+    build:
+      context: .
+      dockerfile: mage.Dockerfile
+      # args:
+      # - USER_CODE_PATH=/home/src/${PROJECT_NAME}
       # These variables will be set inside the mage_pipe container
       # They will be populated from .env file
       # POSTGRES_USER: ${POSTGRES_USER}
@@ -19,34 +14,45 @@ services:
       # POSTGRES_HOST: ${POSTGRES_HOST}
       # POSTGRES_PORT: ${POSTGRES_PORT}
       # POSTGRES_DBNAME: ${POSTGRES_DBNAME}
-      # USER_CODE_PATH: /home/src/${PROJECT_NAME}
       # ENV: ${ENV}
+    # Use the latest Mage AI image from Docker Hub
+    # image: mageai/mageai:latest
+    container_name: mage_pipeline
+    command: mage start ${PROJECT_NAME}
+    env_file:
+      - .env
+    environment:
+      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
     ports:
       - 6789:6789
     volumes:
       - .:/home/src/
+      - ~/.config/gcloud:/root/.config/gcloud
     restart: on-failure:5
     depends_on:
       postgres:
         condition: service_healthy
 
   mlflow_server:
-    image: ghcr.io/mlflow/mlflow:v2.22.0
+    build:
+      context: .
+      dockerfile: mlflow.Dockerfile
     container_name: mlflow_tracking_server
     # Expose the MLflow UI port to your local machine
     ports:
       - "5050:5000"
+    environment:
+      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
     # Use a named volume to persist all MLflow data (experiments, models, etc.)
     volumes:
-      - /Users/matthiasmotl/neuefische/repositories/dtc/dtc_persona_analysis/01_model:/mlflow
+      - ~/.config/gcloud:/root/.config/gcloud
     # The command to start the MLflow tracking server inside the container
     command: >
       mlflow server
       --host 0.0.0.0
       --port 5000
-      --backend-store-uri sqlite:///mlflow/mlflow.db
-      --default-artifact-root /mlflow/artifacts
-
+      --backend-store-uri postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/mydb
+      --default-artifact-root gs://mmotl_mlflow_artifacts/
     # Healthcheck ensures the service is ready before other services depend on it
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
@@ -54,6 +60,9 @@ services:
       timeout: 5s
       retries: 3
     restart: on-failure:5
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   postgres:
     image: postgres:15

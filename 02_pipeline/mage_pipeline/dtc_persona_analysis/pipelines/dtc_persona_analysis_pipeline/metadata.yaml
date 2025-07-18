@@ -23,7 +23,7 @@ blocks:
   type: data_loader
   upstream_blocks: []
   uuid: sql_load_data_from_postgres
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: null
   configuration:
     data_provider: postgres
@@ -44,7 +44,7 @@ blocks:
   upstream_blocks:
   - sql_load_data_from_postgres
   uuid: py_features_only
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: pink
   configuration: {}
   downstream_blocks:
