@@ -30,3 +30,7 @@ good practices considered:
 - 
 
 - outlines are used in the jupyter notebooks for easier navigation
+
+
+future steps:
+- consider timezones in date creation

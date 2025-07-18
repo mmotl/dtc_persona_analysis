@@ -1,3 +1,4 @@
+# cloud version of mage pipeline
 version: '3'
 services:
   mage_pipe:
