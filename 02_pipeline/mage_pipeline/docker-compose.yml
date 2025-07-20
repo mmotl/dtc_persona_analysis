@@ -54,7 +54,8 @@ services:
       --host 0.0.0.0
       --port 5000
       --backend-store-uri postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/mydb
-      --default-artifact-root gs://mmotl_mlflow_artifacts/
+      --default-artifact-root gs://mmotl_bucket_test/
+    # --default-artifact-root gs://mmotl_mlflow_artifacts/
     # Healthcheck ensures the service is ready before other services depend on it
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
