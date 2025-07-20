@@ -202,3 +202,28 @@ data/
 # Environment variables file, used to store sensitive information like API keys
 .env 
 
+# Local Terraform execution-related files
+.terraform/
+.terraform.lock.hcl
+
+# .tfstate files
+# These files are sensitive and should not be stored in Git.
+# Use a remote backend instead.
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Exclude all .tfvars files, which are likely to contain sensitive data,
+# such as passwords or credentials.
+# You can use a .tfvars.example file to show which variables are needed.
+*.tfvars
+*.tfvars.json
+
+# Ignore override files as they are usually specific to a local environment.
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
