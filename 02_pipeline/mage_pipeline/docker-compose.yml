@@ -23,11 +23,13 @@ services:
       - .env
     environment:
       - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
+#      - MLFLOW_TRACKING_URI=http://mlflow_server:5000 # NEW: Tell Mage where to find MLflow
     ports:
       - 6789:6789
     volumes:
       - .:/home/src/
       - ~/.config/gcloud:/root/.config/gcloud
+#      - /var/run/docker.sock:/var/run/docker.sock # NEW: Give Mage control over Docker
     restart: on-failure:5
     depends_on:
       postgres:
