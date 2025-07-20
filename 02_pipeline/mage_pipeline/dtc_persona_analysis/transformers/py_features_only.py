@@ -6,7 +6,7 @@ if 'test' not in globals():
 import pandas as pd
 
 @transformer
-def transform(data, *args, **kwargs):
+def transform(data, data2, *args, **kwargs):
     """
     Template code for a transformer block.
 
@@ -21,9 +21,14 @@ def transform(data, *args, **kwargs):
         Anything (e.g. data frame, dictionary, array, int, str, etc.)
     """
     # Specify your transformation logic here
-    df = pd.DataFrame(data)
-    df = df.drop(columns='date')
-    return df
+    df_reference = pd.DataFrame(data)
+    df_reference = df_reference.drop(columns='date')
+    df_current = pd.DataFrame(data2)
+    df_current = df_current.drop(columns='date')
+    return {
+        'reference': df_reference,
+        'current': df_current
+        }
 
 
 @test

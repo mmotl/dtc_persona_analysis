@@ -41,13 +41,13 @@ def transform_custom(data, *args, **kwargs):
     # Enable scikit-learn autologging
     mlflow.sklearn.autolog()
 
-    X = data
+    X = data['current']
 
     # Experiment tracking
 
     with mlflow.start_run() as parent_run:
     # Iterate over the range of clusters
-        for clusters in tqdm(range(2, 11)):
+        for clusters in tqdm(range(2, 4)):
             
             # Start a new MLflow run for each cluster count
             with mlflow.start_run(nested=True): #run_name=f"kmeans_basic_k={C}"):

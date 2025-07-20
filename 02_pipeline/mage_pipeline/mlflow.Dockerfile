@@ -6,7 +6,7 @@ RUN pip install psycopg2-binary google-cloud-storage
 
 # for debugging purposes, copy the gcp_test.py script into the container
 ARG USER_CODE_PATH=/home/src/${PROJECT_NAME}
-COPY gcp_test.py ${USER_CODE_PATH}/gcp_test.py 
+# COPY gcp_test.py ${USER_CODE_PATH}/gcp_test.py 
 
 # --- Add these lines for debugging ---
 # Downloads and installs the gcloud CLI

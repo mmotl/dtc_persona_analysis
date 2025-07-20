@@ -1,29 +1,5 @@
 blocks:
-- all_upstream_blocks_executed: true
-  color: null
-  configuration:
-    data_provider: postgres
-    data_provider_profile: dev_docker_postgres
-    data_provider_schema: public
-    dbt: {}
-    disable_query_preprocessing: false
-    export_write_policy: replace
-    limit: 1000
-    use_raw_sql: false
-  downstream_blocks:
-  - py_features_only
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: sql
-  name: sql_load_data_from_postgres
-  retry_config: null
-  status: executed
-  timeout: null
-  type: data_loader
-  upstream_blocks: []
-  uuid: sql_load_data_from_postgres
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration:
     data_provider: postgres
@@ -42,9 +18,10 @@ blocks:
   timeout: null
   type: transformer
   upstream_blocks:
-  - sql_load_data_from_postgres
+  - sql_load_reference_data_from_postgres
+  - sql_load_current_data_from_postgres
   uuid: py_features_only
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: pink
   configuration: {}
   downstream_blocks:
@@ -77,10 +54,78 @@ blocks:
   upstream_blocks:
   - mlflow_experiment_tracking
   uuid: mlflow_register_best_model
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    data_provider: postgres
+    data_provider_profile: dev_docker_postgres
+    data_provider_schema: public
+    dbt: {}
+    disable_query_preprocessing: false
+    export_write_policy: replace
+    file_source:
+      path: data_loaders/sql_load_reference_data_from_postgres.sql
+    limit: 1000
+    use_raw_sql: false
+  downstream_blocks:
+  - py_features_only
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: sql_load_reference_data_from_postgres
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_loader
+  upstream_blocks: []
+  uuid: sql_load_reference_data_from_postgres
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    data_provider: postgres
+    data_provider_profile: dev_docker_postgres
+    data_provider_schema: public
+    dbt: {}
+    disable_query_preprocessing: false
+    export_write_policy: replace
+    file_source:
+      path: data_loaders/sql_load_current_data_from_postgres.sql
+    limit: 1000
+    use_raw_sql: false
+  downstream_blocks:
+  - py_features_only
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: sql_load_current_data_from_postgres
+  retry_config: null
+  status: updated
+  timeout: null
+  type: data_loader
+  upstream_blocks: []
+  uuid: sql_load_current_data_from_postgres
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
-conditionals: []
+conditionals:
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: monitoring_dataset_drift
+  retry_config: null
+  status: updated
+  timeout: null
+  type: conditional
+  upstream_blocks:
+  - mlflow_experiment_tracking
+  uuid: monitoring_dataset_drift
 created_at: '2025-07-04 10:09:13.779881+00:00'
 data_integration: null
 description: null

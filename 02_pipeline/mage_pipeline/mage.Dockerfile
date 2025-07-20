@@ -1,5 +1,11 @@
 # Use the official MageAI image as the base image
+# OLD
 FROM mageai/mageai:latest
+
+# NEW
+# FROM python:3.11-slim
+# WORKDIR /app
+# RUN pip install mage-ai==0.9.68
 
 # Define a build argument for the user code path, using PROJECT_NAME environment variable
 ARG USER_CODE_PATH=/home/src/${PROJECT_NAME}

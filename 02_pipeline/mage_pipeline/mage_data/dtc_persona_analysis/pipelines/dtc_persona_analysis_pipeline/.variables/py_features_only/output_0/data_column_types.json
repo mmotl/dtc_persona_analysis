@@ -1,1 +1,1 @@
-{"x1": "float64", "x2": "float64", "x3": "float64", "x4": "float64", "x5": "float64", "x6": "float64", "x7": "float64", "x8": "float64", "x9": "float64", "x10": "float64"}
+{"reference": {"module": "pandas.core.frame", "name": "DataFrame", "type": "instance", "uuid": "pandas.core.frame.DataFrame", "hash": "0xffff566d88b0", "variable_type": "dataframe"}, "current": {"module": "pandas.core.frame", "name": "DataFrame", "type": "instance", "uuid": "pandas.core.frame.DataFrame", "hash": "0xffff566d9ea0", "variable_type": "dataframe"}}
