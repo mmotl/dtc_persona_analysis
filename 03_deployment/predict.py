@@ -6,7 +6,8 @@ import io
 from flask import Flask, request, jsonify
 
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 # Initialize a storage client
 project_id = "tough-processor-312510"
@@ -24,11 +25,12 @@ model_bytes = blob.download_as_bytes()
 # Load the model using pickle
 with io.BytesIO(model_bytes) as f:
     model = pickle.load(f)
+print("Model loaded successfully.")
+
+app = Flask("label_predictor")
 
 
-app = Flask('label_predictor')
-
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict_labels():
     """
     """
@@ -39,11 +41,8 @@ def predict_labels():
     # 2. Convert it to a DataFrame
     features = pd.DataFrame(json_data)
     print("Converted DataFrame:", features)
-        # Define the correct feature names
-    feature_names = [
-        'x1', 'x2', 'x3', 'x4', 'x5', 
-        'x6', 'x7', 'x8', 'x9', 'x10'
-    ]
+    # Define the correct feature names
+    feature_names = ["x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x10"]
 
     # Rename the columns from '0', '1', ... to 'x1', 'x2', ...
     features.columns = feature_names
@@ -52,11 +51,10 @@ def predict_labels():
     predictions_list = predictions_nparray.tolist()
     # print("Predictions:", predictions_list)
 
-    result = {
-        'labels': predictions_list
-    }
+    result = {"labels": predictions_list}
 
     return jsonify(result)
+
 
 if __name__ == "__main__":
 
@@ -65,4 +63,5 @@ if __name__ == "__main__":
     # predicted_labels = predict_labels(features)
     # print("predicted labels:", predicted_labels)
 
-    app.run(debug=True, host='0.0.0.0', port=9696)
+    # app.run(debug=True, host="0.0.0.0", port=9696)
+    print('prediction script executed directly')

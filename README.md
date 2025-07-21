@@ -36,3 +36,12 @@ future steps:
 - consider timezones in date creation
 To revert your CLI to the previously installed version, you may run:
 $ gcloud components update --version 427.0.0
+
+gunicorn --bind=0.0.0.0:9999 --preload  --timeout 120 --log-file gunicorn.log gunicorn_predict:app
+
+docker run -it --rm \
+  --name gunicorn_webservice \
+  -p 9999:9999 \
+  -v "$(pwd)/gcp_key.json:/app/gcp_key.json" \
+  -e GOOGLE_APPLICATION_CREDENTIALS="/app/gcp_key.json" \
+  gunicorn_webservice:v1
