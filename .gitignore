@@ -227,3 +227,6 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+
+#GCP
+gcp_key.json
