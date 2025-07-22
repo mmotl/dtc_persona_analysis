@@ -41,7 +41,7 @@ def transform_custom(data, *args, **kwargs):
     # Enable scikit-learn autologging
     mlflow.sklearn.autolog()
 
-    X = data['current']
+    X = data['reference']
 
     # Experiment tracking
 
