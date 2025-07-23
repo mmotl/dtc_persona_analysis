@@ -51,45 +51,6 @@ docker run -it --rm \
   -p 9999:9999 \
   gunicorn_webservice:v1
 
-```mermaid
-graph TD
-    subgraph "Local Machine"
-        A[Terraform Script]
-        H[Prediction Request Script]
-    end
+## Data Flow Diagram
 
-    subgraph "Google Cloud Platform"
-        B[GCS Bucket]
-    end
-
-    subgraph "Docker Compose Stack"
-        C[PostgreSQL Database]
-        D[MLflow Tracking Server]
-        E[Mage Data Pipeline]
-        F[CloudBeaver UI]
-    end
-
-    subgraph "Docker Container"
-        G[Gunicorn Web Service]
-    end
-
-    I((predicted 
-        labels))
-
-    %% Define relationships and flows
-    A --"Provisions & Manages"--> B
-    
-    D --"Artifact Store"--> B
-    D --"Model Registry "--> C
-    
-    E --"Orchestrates Runs"--> D
-
-    F --"SQL client access"--> C
-    C --"Customer Data"--> E
-
-    H ----> G
-    C --"Production Model"--> G
-
-    G --"runs cluster model"--> I
-    
-```
+![Data Flow Diagram](./images/dfd.svg)
