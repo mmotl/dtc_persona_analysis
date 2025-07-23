@@ -15,9 +15,16 @@ tf_destroy:
 
 .PHONY: black
 
-# Target to format Python code using black
+# Target to format Python scripts using black
 black:
 	black .
+	
+# Target to run the Gunicorn server
+gunicorn:
+	docker run -it --rm \
+	--name gunicorn_webservice \
+	-p 9999:9999 \
+	gunicorn_webservice:v1
 
 # Declare tf_create as a phony target (not a real file)
-.PHONY: tf_create tf_destroy black
+.PHONY: tf_create tf_destroy black gunicorn
