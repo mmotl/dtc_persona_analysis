@@ -15,19 +15,15 @@ graph TD
     end
 
     subgraph "Docker Compose Stack"
-        C[PostgreSQL database 
-        - model registry 
-        - customer database]
+        C["<div style='text-align: left;'>PostgreSQL database<br/>  - model registry<br/>  - customer database</div>"]
         
         subgraph E [Mage Pipeline]
             
             J[Transform] 
-            --> K[EVIDENTLY 
-                    - monitoring] 
+            --> 
+            K["<div style='text-align: left;'>EVIDENTLY<br/>  - monitoring</div>"]
             --"if data drift"--> 
-                D[MLflow tracking server
-                    - model retraining
-                    - return best run]
+            D["<div style='text-align: left;'>MLflow tracking server<br/>  - model retraining<br/>  - return best run</div>"]
         end
         F[CloudBeaver UI]
     end
@@ -36,19 +32,15 @@ graph TD
         G[Gunicorn Web Service]
     end
 
-    I((predicted 
-        labels))
+    I(("<div style='text-align: left;'>predicted<br/>labels</div>"))
 
-    %% Define relationships and flows
     A -->|"provides"| B
     
     D --"artifacts"--> B
-    D --"register model and
-        promote to production"--> C
+    D --"register model and<br/>promote to production"--> C
     
     F --"client access"--> C
-    C --"new customer data
-        reference customer data"--> J
+    C --"new customer data<br/>reference customer data"--> J
 
     H ----> G
     C --"production model"--> G
