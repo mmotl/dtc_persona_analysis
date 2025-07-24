@@ -51,7 +51,7 @@ docker run -it --rm \
   -p 9999:9999 \
   gunicorn_webservice:v1
 
-
+In /data is pickled baseline model
 
 
 # FINAL README. 
