@@ -25,7 +25,7 @@ filename = sys.argv[5] if len(sys.argv) > 0 else "data.csv"  # Output filename
 # C = int(sys.argv[5])  # Number of clusters (3 in the original code)
 
 # initialization of centroids
-# These centroids are used to generate the synthetic data.
+# these centroids are used to generate the synthetic data.
 centroids = [
     [
         -2.50919762,
