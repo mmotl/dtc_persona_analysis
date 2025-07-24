@@ -25,6 +25,16 @@ gunicorn:
 	--name gunicorn_webservice \
 	-p 9999:9999 \
 	gunicorn_webservice:v1
+	
+create_data:
+	cd 00_create_data && python create_data.py 500 2 42 1 features_01_2025.csv
+	cd 00_create_data && python ingest.py ing_test features_01_2025.csv
+	cd 00_create_data && python create_data.py 500 2 42 2 features_02_2025.csv
+	cd 00_create_data && python ingest.py ing_test features_02_2025.csv
+	cd 00_create_data && python create_data.py 500 3.1 5977 3 features_03_2025.csv
+	cd 00_create_data && python ingest.py ing_test features_03_2025.csv
+	cd 00_create_data && python create_data.py 500 2 42 4 features_04_2025.csv
+	cd 00_create_data && python ingest.py ing_test features_04_2025.csv
 
 # Declare tf_create as a phony target (not a real file)
-.PHONY: tf_create tf_destroy black gunicorn
+.PHONY: tf_create tf_destroy black gunicorn create_data
