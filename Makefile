@@ -1,8 +1,10 @@
 # Set the Terraform directory to the current directory
 TF_DIR := ./05_iac
-
 # Set the path to the main Terraform configuration file
 TF_MAIN := $(TF_DIR)/main.tf
+
+# gunicorn directory
+GUNICORN_DIR := ./03_deployment
 
 # Target to initialize and apply Terraform configuration
 tf_create:
@@ -22,9 +24,11 @@ black:
 # Target to run the Gunicorn server
 gunicorn:
 	docker run -it --rm \
-	--name gunicorn_webservice \
-	-p 9999:9999 \
-	gunicorn_webservice:v1
+  --name gunicorn_webservice \
+  -p 9999:9999 \
+  -v "$(GUNICORN_DIR)/gcp_key.json:/app/gcp_key.json" \
+  -e GOOGLE_APPLICATION_CREDENTIALS="/app/gcp_key.json" \
+  gunicorn_webservice:v1
 	
 create_data:
 	cd 00_create_data && python create_data.py 500 2 42 1 features_01_2025.csv

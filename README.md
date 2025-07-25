@@ -3,13 +3,17 @@
 
 <!-- This project is a complete MLOps pipeline for creating customer personas for a Direct-to-Consumer (DTC) business. It uses a K-Means clustering model to segment customers based on their data. The entire environment is containerized with Docker Compose and uses modern MLOps tools for orchestration, experiment tracking, and data monitoring.-->
 
-### First things first:
-I made a brief guideline in the evaluation.md ([click here](./evaluation.md)) to help you navigate the project evaluation! Hope, it helps ...
+![Codehase](./images/bunny2.png)
 
+### First things first:
+For the MLOps Zoomcamp, I made a brief guideline in the evaluation.md ([click here](./evaluation.md)) to help you navigate the project evaluation! Hope, it helps ...
+
+<!--
 ### Objective
 With this project, I am re-creating a task I got as a market researcher back in the 2010s.  
 At that time, I solved it with some self-written distance metrics in MS Excel.  
 Now, I'm getting my hand at it again in quite a different tech stack ... :)
+-->
 
 ### Problem Statement  
 <!--
@@ -23,6 +27,10 @@ Now, I'm getting my hand at it again in quite a different tech stack ... :)
 - well and then, the next step is to design a model for newly collected data to label it. 
 - This is what this project revolves around.
 -->
+```
+TL;DR:  
+This project builds a system to automatically label new customers with the a client's existing marketing personas. The model works by predicting the closest pre-defined persona centroid, and includes a monitoring to re-train and deploy a new model when the personas no longer match the incoming data.
+````
 
 1. Background & context  
 A key client has segmented its customer base using a cluster analysis performed by a third-party provider. These clusters are the foundation of their core marketing personas (e.g., "Sustainable Steve," "Eco-Conscious Haley"). The mathematical definition for each persona is provided by a specific cluster centroid in a multi-dimensional feature space.
@@ -54,19 +62,20 @@ Core project assets we got provided (*in this project, since the original data i
 ## Architecture: Data Flow Diagram  
 ![Data Flow Diagram](./images/dfd.svg)
 
-The diagram below outlines the complete architecture of the project, from infrastructure provisioning to model serving. The diagram can be adapted easily via the mermaid code in `dfd.mermaid` 
+The diagram outlines the complete architecture of the project, from infrastructure provisioning to model serving.  
+The diagram can be adapted easily via the mermaid code in `dfd.mermaid` 
 
 ## Technology Stack
 
 | Category | Technology | Purpose |
 | :--- | :--- | :--- |
 | **Infrastructure** | Terraform, Google Cloud Storage (GCS) | Infrastructure as Code, Artifact Storage |
-| **Containerization** | Docker, Docker Compose | Application Containerization & Orchestration |
+| **Containerization** | Docker, Docker Compose | Application Containerization & Stacking|
 | **Data & ML Pipeline**| Mage, MLflow, Evidently AI | Orchestration, Experiment Tracking, Data Monitoring |
 | **Database** | PostgreSQL, CloudBeaver | Data Storage, Model Registry, DB Management |
 | **Model Serving** | Gunicorn, Python | API for real-time predictions |
 | **Code Quality** | Black | Python Code Formatting |
-| **Developer Tooling** | Pre-Commit Hooks, Makefile | Automated pre-commit checks, Command runner for Docker, Terraform, black |  
+| **Developer Tooling** | Pre-Commit Hooks, Makefile | Automated pre-commit checks, Command runner for common tasks |  
 
 ## Setup and Installation
 
@@ -147,17 +156,17 @@ Once the stack is running, you can interact with the different components:
     *   Access the PostgreSQL database. Use the credentials from your `.env` file.
 
 ### X. As soon as postgres runs, ingest artificial data into the database
-the code runs via ingestion scripts
+To ingest a suitable dataset prepared, you can shortcut with `make` :
+```bash
+make create_data
+```
+The code runs via ingestion scripts with the following syntax. This is fyi only. No need to manually execute!
 ```bash
 cd 00_create_data 
-python create_data.py <Number of samples> <Standard deviation of clusters> <RSEED> <month> <filename>  
-python ingest.py <table_name to write to> <filename_data_to_ingest>
+python create_data.py <number_of_samples> <std_dev> <random_seed> <month_of_timestamp> <filename.csv>  
+python ingest.py <postgres_table_name_to_write_to> <filename.csv>
 ```
-but there is a makefile to ingest a suitable dataset prepared,  
-please run this:
-```bash
-make create_date
-```
+
 ### X. Run pipeline with reference data to create initial model
 ### X. Start Web Service
 
@@ -168,7 +177,7 @@ You can use the provided script to send a request to the prediction service.
 
 ```bash
 cd /03_deployment
-python test_gunicorn.py # this runs a test with 3 new observations to be labeled provided
+python test_gunicorn.py # this runs a test with 3 new observations to be labeled
 ```
 <!-->
 Alternatively, you can use `curl` to send a direct request to the Gunicorn web service:
