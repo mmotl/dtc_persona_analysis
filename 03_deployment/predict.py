@@ -32,8 +32,7 @@ app = Flask("label_predictor")
 
 @app.route("/predict", methods=["POST"])
 def predict_labels():
-    """
-    """
+    """ """
     # 1. Get the data from the incoming request
     json_data = request.get_json()
     print("Received data:", json_data)
@@ -64,4 +63,4 @@ if __name__ == "__main__":
     # print("predicted labels:", predicted_labels)
 
     # app.run(debug=True, host="0.0.0.0", port=9696)
-    print('prediction script executed directly')
+    print("prediction script executed directly")

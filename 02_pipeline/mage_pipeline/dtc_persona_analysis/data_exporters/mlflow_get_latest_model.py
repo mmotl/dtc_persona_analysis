@@ -1,4 +1,4 @@
-if 'data_exporter' not in globals():
+if "data_exporter" not in globals():
     from mage_ai.data_preparation.decorators import data_exporter
 
 
@@ -30,7 +30,9 @@ def export_data(data, *args, **kwargs):
 
     try:
         # Get the latest versions of the registered model
-        latest_versions = client.get_latest_versions(name=model_name, stages=["Production"])
+        latest_versions = client.get_latest_versions(
+            name=model_name, stages=["Production"]
+        )
 
         # The result is a list, so we get the first element
         if latest_versions:
@@ -51,6 +53,8 @@ def export_data(data, *args, **kwargs):
 
     except mlflow.exceptions.RestException as e:
         print(f"Error communicating with MLflow server: {e}")
-        print(f"Please ensure the model name '{model_name}' is correct and the MLflow server is running.")
+        print(
+            f"Please ensure the model name '{model_name}' is correct and the MLflow server is running."
+        )
 
     return latest_version.version

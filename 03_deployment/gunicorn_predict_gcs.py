@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.INFO)
 # Define a variable in the global scope that will hold our model.
 model = None
 
+
 def load_model():
     """
     Loads the model from GCS and populates the global 'model' variable.
@@ -41,6 +42,7 @@ def load_model():
         logging.error(f"❌ Failed to load model: {e}", exc_info=True)
         model = None
 
+
 # --- Flask App Definition ---
 app = Flask("label_predictor")
 
@@ -59,7 +61,12 @@ def predict_labels():
     """
     # A check to ensure the model was loaded correctly during startup.
     if model is None:
-        return jsonify({"error": "Model is not available. Check server logs for details."}), 500
+        return (
+            jsonify(
+                {"error": "Model is not available. Check server logs for details."}
+            ),
+            500,
+        )
 
     json_data = request.get_json()
     features = pd.DataFrame(json_data)
@@ -72,8 +79,8 @@ def predict_labels():
 
     return jsonify(result)
 
+
 # This block is only for local debugging (e.g., 'python gunicorn
 
 # This block is for local debugging only, Gunicorn will not run this.
 # if __name__ == "__main__":
-    

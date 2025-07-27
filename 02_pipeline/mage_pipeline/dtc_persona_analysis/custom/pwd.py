@@ -1,9 +1,10 @@
-if 'custom' not in globals():
+if "custom" not in globals():
     from mage_ai.data_preparation.decorators import custom
-if 'test' not in globals():
+if "test" not in globals():
     from mage_ai.data_preparation.decorators import test
 
 import os
+
 
 @custom
 def pwd(*args, **kwargs):
@@ -13,8 +14,7 @@ def pwd(*args, **kwargs):
     Returns:
         Anything (e.g. data frame, dictionary, array, int, str, etc.)
     """
-    project_path = os.getenv('PWD')
-    
+    project_path = os.getenv("PWD")
 
     return {project_path}
 
@@ -24,4 +24,4 @@ def test_output(output, *args) -> None:
     """
     Template code for testing the output of the block.
     """
-    assert output is not None, 'The output is undefined'
+    assert output is not None, "The output is undefined"

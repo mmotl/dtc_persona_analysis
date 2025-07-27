@@ -1,7 +1,9 @@
 import pandas as pd
+
 # from google.cloud import storage
 import mlflow
 import sys
+
 # import io
 # import os
 import logging
@@ -14,15 +16,15 @@ logging.basicConfig(level=logging.INFO)
 # Define a variable in the global scope that will hold our model.
 model = None
 
+
 def load_model():
     """
     Loads the model from GCS and populates the global 'model' variable.
     This function will be called once when the script is loaded.
     """
     global model
-   
 
-# --- Configuration ---
+    # --- Configuration ---
     MLFLOW_TRACKING_URI = "http://localhost:5050"
     MODEL_NAME = "dtc_persona_clustering_model"
     MODEL_STAGE = "Production"
@@ -48,9 +50,13 @@ def load_model():
         print("\n--- MLFLOW ERROR ---")
         print(f"Failed to load the model due to an MLflow REST API error.")
         print("This commonly happens if:")
-        print(f"  1. The MLflow server is not running or accessible at '{MLFLOW_TRACKING_URI}'.")
+        print(
+            f"  1. The MLflow server is not running or accessible at '{MLFLOW_TRACKING_URI}'."
+        )
         print(f"  2. The model named '{MODEL_NAME}' does not exist in the registry.")
-        print(f"  3. The model does not have a version assigned to the '{MODEL_STAGE}' stage.")
+        print(
+            f"  3. The model does not have a version assigned to the '{MODEL_STAGE}' stage."
+        )
         print(f"\nOriginal Error: {e}")
         # Exit the script with an error code, as the application cannot continue.
         sys.exit(1)
@@ -66,8 +72,9 @@ def load_model():
         print("\n✅ Model loaded successfully!")
         # You can now use the 'model' object for predictions.
         # For example, print its metadata if available.
-        if hasattr(model, 'metadata'):
+        if hasattr(model, "metadata"):
             print(f"Model Signature: {model.metadata.signature}")
+
 
 # --- Flask App Definition ---
 app = Flask("label_predictor")
@@ -87,7 +94,12 @@ def predict_labels():
     """
     # A check to ensure the model was loaded correctly during startup.
     if model is None:
-        return jsonify({"error": "Model is not available. Check server logs for details."}), 500
+        return (
+            jsonify(
+                {"error": "Model is not available. Check server logs for details."}
+            ),
+            500,
+        )
 
     json_data = request.get_json()
     features = pd.DataFrame(json_data)
@@ -100,8 +112,8 @@ def predict_labels():
 
     return jsonify(result)
 
+
 # This block is only for local debugging (e.g., 'python gunicorn
 
 # This block is for local debugging only, Gunicorn will not run this.
 # if __name__ == "__main__":
-    
