@@ -16,9 +16,7 @@ where:
     """
 
 n = int(sys.argv[1])  # Number of samples (500 in the original code)
-cluster_std = float(
-    sys.argv[2]
-)  # Standard deviation of clusters (2 in the original code)
+cluster_std = float(sys.argv[2])  # Standard deviation of clusters (2 in the original code)
 RSEED = int(sys.argv[3])  # Random seed for reproducibility
 month = int(sys.argv[4])  # Month for the date column (default is June)
 filename = sys.argv[5] if len(sys.argv) > 0 else "data.csv"  # Output filename
