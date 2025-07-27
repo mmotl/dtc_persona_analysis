@@ -3,6 +3,10 @@ TF_DIR := ./05_iac
 # Set the path to the main Terraform configuration file
 TF_MAIN := $(TF_DIR)/main.tf
 
+# Target to build and run the Docker stack
+PIPELINE_DIR := ./02_pipeline/mage_pipeline
+COMPOSE_FILE := ${PIPELINE_DIR}/docker-compose.yml
+
 # gunicorn directory
 GUNICORN_DIR := ./03_deployment
 
@@ -29,8 +33,16 @@ gunicorn:
   -v "$(GUNICORN_DIR)/gcp_key.json:/app/gcp_key.json" \
   -e GOOGLE_APPLICATION_CREDENTIALS="/app/gcp_key.json" \
   gunicorn_webservice:v1
-	
+
+.PHONY: docker_stack
+
+docker_stack:
+	@echo "Bringing up the Docker stack from ${COMPOSE_FILE}..."
+	@docker-compose -f ${COMPOSE_FILE} up -d
+
+# Target to create and ingest data using the create_data.py script
 create_data:
+	@echo "Creating data and ingesting into postgres database ..."
 	cd 00_create_data && python create_data.py 500 2 42 1 features_01_2025.csv
 	cd 00_create_data && python ingest.py ing_test features_01_2025.csv
 	cd 00_create_data && python create_data.py 500 2 42 2 features_02_2025.csv
@@ -41,4 +53,4 @@ create_data:
 	cd 00_create_data && python ingest.py ing_test features_04_2025.csv
 
 # Declare tf_create as a phony target (not a real file)
-.PHONY: tf_create tf_destroy black gunicorn create_data
+.PHONY: tf_create tf_destroy black gunicorn create_data docker_stack

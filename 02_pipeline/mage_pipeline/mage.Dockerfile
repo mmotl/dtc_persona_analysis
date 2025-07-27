@@ -1,6 +1,9 @@
 # Use the official MageAI image as the base image
 # OLD
 FROM mageai/mageai:latest
+# FROM mageai/mageai:0.9.68-python3.9
+
+# FROM python:3.9.18-slim-bullseye
 
 # NEW
 # FROM python:3.11-slim
@@ -13,5 +16,6 @@ ARG USER_CODE_PATH=/home/src/${PROJECT_NAME}
 # Copy the requirements.txt file into the container at the specified user code path
 COPY requirements.txt ${USER_CODE_PATH}/requirements.txt
 
+# RUN pip install --no-cache-dir mage-ai==0.9.68
 # Install Python dependencies from requirements.txt
 RUN pip3 install -r ${USER_CODE_PATH}/requirements.txt

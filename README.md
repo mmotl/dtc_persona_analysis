@@ -1,5 +1,5 @@
 # DTC Persona Pipeline
-*Customer persona analysis and segmentation mapping*
+*MLOps infrastructure for customer persona analysis and segmentation mapping*
 
 <!-- This project is a complete MLOps pipeline for creating customer personas for a Direct-to-Consumer (DTC) business. It uses a K-Means clustering model to segment customers based on their data. The entire environment is containerized with Docker Compose and uses modern MLOps tools for orchestration, experiment tracking, and data monitoring.-->
 
@@ -33,7 +33,7 @@ This project builds a system to automatically label new customers with the a cli
 ````
 
 1. Background & context  
-A key client has segmented its customer base using a cluster analysis performed by a third-party provider. These clusters are the foundation of their core marketing personas (e.g., "Sustainable Steve," "Eco-Conscious Haley"). The mathematical definition for each persona is provided by a specific cluster centroid in a multi-dimensional feature space.
+A key client has segmented its customer base using a cluster analysis performed by a third-party provider. These clusters are the foundation of their core marketing personas (e.g., "Sustainable Steve," "Eco-Conscious Haley") based on the mean of their demographic features. The mathematical definition for each persona is provided by a specific cluster centroid in a multi-dimensional feature space.
 
 2. Core challenge  
 The client has tasked us with building a system to classify new participants from our ongoing market research surveys into their pre-existing persona framework. The challenge is not to recreate the clustering, but to operationalize the labelling of new data points against the static, pre-defined cluster centroids provided by the original vendor.
@@ -125,7 +125,9 @@ mkdir data
 
 ### 3. Provision Infrastructure
 
-Use the `Makefile` to run Terraform and create the GCS bucket.
+Use the `Makefile` to run Terraform and create the GCS bucket as an artifact store.  
+*(Of course you can edit the docker-compose.yml and the necessary adaptions to only have a local artifact store,*. 
+*get inspired by the [`docker-compose_local.yml`](./02_pipeline/mage-pipeline/docker-compose_local.yml) to only have a local artifact store!)*
 
 ```bash
 make tf_create
