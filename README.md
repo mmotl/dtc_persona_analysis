@@ -29,7 +29,7 @@ Now, I'm getting my hand at it again in quite a different tech stack ... :)
 -->
 ```
 TL;DR:  
-This project builds a system to automatically label new customers with the a client's existing marketing personas. The model works by predicting the closest pre-defined persona centroid, and includes a monitoring to re-train and deploy a new model when the personas no longer match the incoming data.
+This project builds a system to automatically label new customers data with the a client's existing marketing personas. The model works by predicting the closest pre-defined persona centroid, and includes a monitoring to re-train and deploy a new model when the personas no longer match the incoming data.
 ````
 
 1. Background & context  
@@ -41,13 +41,13 @@ The client has tasked us with building a system to classify new participants fro
 3. Project objectives  
 - Primary objective: To develop a robust and automated classification model that assigns new survey participants to the most appropriate marketing persona. The model's logic is based on calculating the proximity of a new data point to the provided persona centroids.
 - Secondary objective: To implement a data monitoring system that tracks the statistical distribution of incoming survey data over time. This system will detect "data drift" and trigger a model re-training and deployment if the characteristics of new participants deviate significantly from the established persona definitions.  
-*In real production ofc., a need for model retraining would trigger an alert to let decision makers re-evaluate the personas themselves.*
+*In real production ofc., a need for model retraining should not instantly re-train and deploy a model - this is just a technical showcase in this project. It should more trigger an alert to let decision makers re-evaluate the personas themselves.*
 
 4. Data  
 Core project assets we got provided (*in this project, since the original data is confidential, re-created with artificial data)*:
 - Feature list: We have the definitive list of features (x1, x2, ..., x10) that define the persona space. These features will be incorporated into our survey instruments.
 - Persona cluster centroids: We have received the numerical centroid for each persona. A centroid is a vector representing the mathematical average of all data points within a cluster, effectively serving as the "perfect example" or ideal center for that persona.  
-*In this project, this is my ground truth for building new artificial data to be labelled.*
+*In this project, this is my ground truth for building new artificial data to be labelled.* 
 
 ## Core Features
 *   **Containerized Environment:** All core services are orchestrated via **Docker Compose** for easy setup and consistent environments.
@@ -58,6 +58,7 @@ Core project assets we got provided (*in this project, since the original data i
 *   **Infrastructure as Code (IaC):** Google Cloud Storage bucket is provisioned and managed using **HashiCorp Terraform**.
 *   **Database Management:** **PostgreSQL** serves as the backend for the MLflow Model Registry and stores customer data. 
     **CloudBeaver** provides a web UI for easy database access.
+*   ***Development** | Pre-Commit hooks ensure no private keys are exposed to GitHub and Makefile automates common tasks for Terraform, black formatting, starting a gunicorn web server, the docker_stack and the data ingesition.  
 
 ## Architecture: Data Flow Diagram  
 ![Data Flow Diagram](./images/dfd.svg)
@@ -75,7 +76,7 @@ The diagram can be adapted easily via the mermaid code in `dfd.mermaid`
 | **Database** | PostgreSQL, CloudBeaver | Data Storage, Model Registry, DB Management |
 | **Model Serving** | Gunicorn, Python | API for real-time predictions |
 | **Code Quality** | Black | Python Code Formatting |
-| **Developer Tooling** | Pre-Commit Hooks, Makefile | Automated pre-commit checks, Command runner for common tasks |  
+| **Developer Tooling** | Pre-Commit hooks, Makefile | Automated pre-commit checks, Command runner for common tasks |  
 
 ## Setup and Installation
 
@@ -112,10 +113,15 @@ POSTGRES_USER="align_with_docker-compose"
 POSTGRES_PASSWORD="align_with_docker-compose"
 POSTGRES_DB="align_with_docker-compose"
 ```
-
-Environment: Create a conda environment using the provided `environment.yml`:
+To be on the safe side, duplicate the .env to the Mage pipeline folder (a step to take care of in a next iteration):
 ```bash
-conda env create -f environment.yml
+cp .env 02_pipeline/mage_pipeline/.env
+```
+
+Virtual environment:  
+Create a conda environment using the provided `environment.yml`:
+```bash
+conda env create -f environment.yml -n <your_new_env_name>
 ```
 
 Create a data subfolder
@@ -135,7 +141,7 @@ make tf_create
 
 This will initialize Terraform and apply the configuration to create the necessary cloud resources.
 
-### 4. Launch the Application Stack
+### 4. Launch the application stack
 
 Build and run all the services using Docker Compose.
 
@@ -156,6 +162,7 @@ Once the stack is running, you can interact with the different components:
     *   View experiment runs, compare parameters/metrics, and manage registered models.
 *   **CloudBeaver Database UI:** `http://localhost:8978`
     *   Access the PostgreSQL database. Use the credentials from your `.env` file.
+    * Don't get fooled: When you run CloudBeaver for the first time, it wants you to set up admin credential. This is for the UI only. Just do it to be able to run queries and to access the schema.
 
 ### X. As soon as postgres runs, ingest artificial data into the database
 To ingest a suitable dataset prepared, you can shortcut with `make` :
@@ -164,14 +171,35 @@ make create_data
 ```
 The code runs via ingestion scripts with the following syntax. This is fyi only. No need to manually execute!
 ```bash
+#fyi only, no need to run!
 cd 00_create_data 
 python create_data.py <number_of_samples> <std_dev> <random_seed> <month_of_timestamp> <filename.csv>  
 python ingest.py <postgres_table_name_to_write_to> <filename.csv>
+#fyi only, no need to run!
 ```
 
 ### X. Run pipeline with reference data to create initial model
-### X. Start Web Service
+* It's time to create a model for the reference data in Mage
+* The mechanic is: 
+    * The data ingested in postgres is data for January to April 2025, 500 customer observations each month. 
+    * The data for January, February and April is not deviating from another, but there is a significant drift for the March data.
+    * To trigger drift detection, and hence triggering the initial training of a model, January must be loaded as "reference" data and March as "current" data, like this:
+    ![Data Loader](./images/data_loader.png)
+    ![Data Loader Current](./images/data_loader_current.png)
+    * Now you can choose in the custom block what dataset to use to train the model,  
+    either the current data aor the reference data:
+    ![Experiment](./images/experiment.png)
 
+* So, the idea is - there is always the reference data from January and then there is follow-up data, February, March, ...
+* February: nothing would happen, the data drift conditional would not trigger re-training.
+* March: Evidently would notice data drift and the conditional would trigger the re-training of a model, of which the best run would be registered and promoted to production.
+ 
+* *(There is a fallback pickled model in ```01_model/dtc_persona_clustering_model_v1/model/model.pkl```, just in case).*
+### X. Start Web Service
+* You can start the Gunicorn web service with an endpoint to predict new persona labels based on customer features like this:
+```bash
+make gunicorn
+```
 
 ### Running a Prediction
 
@@ -181,31 +209,14 @@ You can use the provided script to send a request to the prediction service.
 cd /03_deployment
 python test_gunicorn.py # this runs a test with 3 new observations to be labeled
 ```
-<!-->
-Alternatively, you can use `curl` to send a direct request to the Gunicorn web service:
 
-```bash
-curl -X POST -H "Content-Type: application/json" \
---data '{"customer_id": "123", "features": [0.1, 0.5, 0.9]}' \
-http://localhost:8080/predict
-```
--->
+### And there we go.  
 
-## Makefile Commands
-
-A `Makefile` is included to simplify common tasks.
-
-*   `make terraform_create`: Provisions the GCS infrastructure.
-*   `make terraform_destroy`: Destroys the GCS infrastructure. **Use with caution.**
-*   `make black`: Formats all Python code using the Black code formatter.
-*   `make up`: Starts all services with `docker-compose up -d`.
-*   `make down`: Stops all running services with `docker-compose down`.
++++
++++
 
 ## License
-
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
