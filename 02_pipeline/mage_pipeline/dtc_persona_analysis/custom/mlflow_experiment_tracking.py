@@ -1,6 +1,6 @@
-if "custom" not in globals():
+if 'custom' not in globals():
     from mage_ai.data_preparation.decorators import custom
-if "test" not in globals():
+if 'test' not in globals():
     from mage_ai.data_preparation.decorators import test
 
 import pandas as pd
@@ -13,7 +13,6 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
 import logging
-
 # deactivated for debugging reasons
 # logging.getLogger("mlflow").setLevel(logging.ERROR) # Suppress the MLflow warning - It only shows warning below the ERROR level.
 
@@ -31,39 +30,36 @@ def transform_custom(data, *args, **kwargs):
     # TO BE parametrized
     experiment_name = "dtc_persona_analysis"
     model_name = "dtc_persona_clustering_model"
-    path = "../data/test_ref.csv"
+    path = "../data/test_ref.csv" 
 
     mlflow.set_tracking_uri("http://mlflow_server:5000")
-    print(
-        f"MLflow tracking URI has been successfully set to: {mlflow.get_tracking_uri()}"
-    )
-
+    print(f"MLflow tracking URI has been successfully set to: {mlflow.get_tracking_uri()}")
+    
     # mlflow.set_tracking_uri("sqlite:///mlflow.db") # for local
     mlflow.set_experiment(experiment_name)
 
     # Enable scikit-learn autologging
     mlflow.sklearn.autolog()
 
-    # X = data['reference']
-    X = data["current"]
+    X = data['reference']
 
     # Experiment tracking
 
     with mlflow.start_run() as parent_run:
-        # Iterate over the range of clusters
+    # Iterate over the range of clusters
         for clusters in tqdm(range(2, 11)):
-
+            
             # Start a new MLflow run for each cluster count
-            with mlflow.start_run(nested=True):  # run_name=f"kmeans_basic_k={C}"):
+            with mlflow.start_run(nested=True): #run_name=f"kmeans_basic_k={C}"):
 
-                # Log the input data
+                # Log the input data   
                 mlflow.log_param("input_data_shape", X.shape)
                 mlflow.log_param("input_data_columns", list(X.columns))
 
                 # Instantiate your model
                 # MLflow will capture these parameters automatically
-                model = KMeans(n_clusters=clusters, n_init=10)  # , random_state=42)
-
+                model = KMeans(n_clusters=clusters, n_init=10)#, random_state=42)
+                
                 # Fit the model
                 # MLflow intercepts this .fit() call to log metrics and artifacts
                 model.fit(X)
@@ -74,7 +70,7 @@ def transform_custom(data, *args, **kwargs):
                 mlflow.log_metric("inertia", model.inertia_)
 
                 # Log silhouette score, which measures how similar an object is to its own cluster compared to other clusters
-                # A higher silhouette score indicates better-defined clusters
+                # A higher silhouette score indicates better-defined clusters 
                 silhouette = silhouette_score(X, model.fit_predict(X))
                 mlflow.log_metric("silhouette", silhouette)
 
@@ -88,21 +84,20 @@ def transform_custom(data, *args, **kwargs):
 
                 # Log the model itself
                 mlflow.set_tag("run_purpose", "experiment from pipeline")
-
+        
         experiment = mlflow.get_experiment_by_name(experiment_name)
         runs = mlflow.search_runs(
-            experiment_ids=[experiment.experiment_id],
-            order_by=["metrics.silhouette_inertia_ratio DESC"],
-            max_results=1,
-        )
+                                experiment_ids=[experiment.experiment_id],
+                                order_by=["metrics.silhouette_inertia_ratio DESC"],
+                                max_results=1
+                                )
         best_run = runs.iloc[0]
 
-    return best_run.run_id  # Return the ID of the best run
-
+    return best_run.run_id # Return the ID of the best run
 
 @test
 def test_output(output, *args) -> None:
     """
     Template code for testing the output of the block.
     """
-    assert output is not None, "The output is undefined"
+    assert output is not None, 'The output is undefined'

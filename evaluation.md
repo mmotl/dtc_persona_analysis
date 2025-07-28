@@ -1,5 +1,4 @@
-
-## Evaluation Criteria
+This is meant to help you with the evaluation
 
 * Problem description
     * 0 points: The problem is not described

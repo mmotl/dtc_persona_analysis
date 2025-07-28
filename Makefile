@@ -41,16 +41,17 @@ docker_stack:
 	@docker-compose -f ${COMPOSE_FILE} up -d
 
 # Target to create and ingest data using the create_data.py script
+INGEST_TABLE=customer_features_test
 create_data:
 	@echo "Creating data and ingesting into postgres database ..."
-	cd 00_create_data && python create_data.py 500 2 42 1 features_01_2025.csv
-	cd 00_create_data && python ingest.py ing_test features_01_2025.csv
+	cd 00_create_data && python create_data_wlabel.py 500 2 42 1 features_01_2025.csv
+	cd 00_create_data && python ingest.py $(INGEST_TABLE) features_01_2025.csv
 	cd 00_create_data && python create_data.py 500 2 42 2 features_02_2025.csv
-	cd 00_create_data && python ingest.py ing_test features_02_2025.csv
+	cd 00_create_data && python ingest.py $(INGEST_TABLE) features_02_2025.csv
 	cd 00_create_data && python create_data.py 500 3.1 5977 3 features_03_2025.csv
-	cd 00_create_data && python ingest.py ing_test features_03_2025.csv
+	cd 00_create_data && python ingest.py $(INGEST_TABLE) features_03_2025.csv
 	cd 00_create_data && python create_data.py 500 2 42 4 features_04_2025.csv
-	cd 00_create_data && python ingest.py ing_test features_04_2025.csv
+	cd 00_create_data && python ingest.py $(INGEST_TABLE) features_04_2025.csv
 
 # Declare tf_create as a phony target (not a real file)
 .PHONY: tf_create tf_destroy black gunicorn create_data docker_stack

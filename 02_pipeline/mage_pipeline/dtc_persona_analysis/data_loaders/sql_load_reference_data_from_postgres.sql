@@ -1,3 +1,3 @@
 -- Docs: https://docs.mage.ai/guides/sql-blocks
-select * from ing_test
+select * from customer_features_test
 where extract(month from date) = 1 --{{ reference_month }};

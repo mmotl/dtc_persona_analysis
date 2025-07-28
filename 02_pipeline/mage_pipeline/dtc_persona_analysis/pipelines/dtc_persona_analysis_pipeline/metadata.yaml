@@ -14,7 +14,7 @@ blocks:
   language: python
   name: py_features_only
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: transformer
   upstream_blocks:
@@ -49,7 +49,7 @@ blocks:
   language: python
   name: mlflow_register_best_model
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: custom
   upstream_blocks:
