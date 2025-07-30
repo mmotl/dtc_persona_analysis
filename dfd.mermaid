@@ -14,25 +14,29 @@ graph TD
         B[GCS bucket]
     end
 
+        subgraph "<div style='text-align: center;'>TELEGRAM<br/>messenger service</div>"
+        L["<div style='text-align: left;'>chat notification<br/>"]
+    end
+
     subgraph "Docker Compose Stack"
         C["<div style='text-align: left;'>PostgreSQL database<br/>  - model registry<br/>  - customer database</div>"]
         
-        subgraph E [Mage Pipeline]
+        subgraph E [MAGE Pipeline]
             
             J[Transform] 
             --> 
             K["<div style='text-align: left;'>EVIDENTLY<br/>  - monitoring</div>"]
             --"if data drift"--> 
-            D["<div style='text-align: left;'>MLflow tracking server<br/>  - model retraining<br/>  - return best run</div>"]
+            D["<div style='text-align: left;'>MLFLOW tracking server<br/>  - model retraining<br/>  - return best run</div>"]
         end
         F[CloudBeaver UI]
     end
 
     subgraph "Docker Container"
-        G[Gunicorn Web Service]
+        G[GUNICORN web service]
     end
 
-    I(("<div style='text-align: left;'>predicted<br/>labels</div>"))
+    I(("<div style='text-align: center;'>predicted<br/>labels</div>"))
 
     A -->|"provides"| B
     
@@ -46,3 +50,6 @@ graph TD
     C --"production model"--> G
 
     G --"runs k-means model"--> I
+
+    K --> L
+    K ~~~ L

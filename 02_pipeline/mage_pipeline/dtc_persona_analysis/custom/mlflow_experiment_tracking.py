@@ -12,6 +12,10 @@ from tqdm import tqdm
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
+import requests
+import sys
+import os
+
 import logging
 # deactivated for debugging reasons
 # logging.getLogger("mlflow").setLevel(logging.ERROR) # Suppress the MLflow warning - It only shows warning below the ERROR level.
@@ -92,6 +96,34 @@ def transform_custom(data, *args, **kwargs):
                                 max_results=1
                                 )
         best_run = runs.iloc[0]
+    
+    token = os.environ.get('BOT_TOKEN')
+    chat_id = os.environ.get('CHAT_ID')
+    message = os.environ.get('MESSAGE_DRIFT')
+
+    
+    # args: The output from any upstream parent blocks (if applicable)
+
+    # The URL for the sendMessage method of the Telegram Bot API
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+    # The payload to be sent in the request
+    payload = {
+        'chat_id': chat_id,
+        'text': message,
+        'parse_mode': 'Markdown'  # Optional: for message formatting (e.g., *bold*, _italic_)
+    }
+
+    try:
+        # Send the request
+        response = requests.post(url, data=payload)
+        # Raise an exception if the request was unsuccessful
+        response.raise_for_status()
+        print("Message sent successfully!")
+    #    return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to send message: {e}")
+    #    return None
 
     return best_run.run_id # Return the ID of the best run
 

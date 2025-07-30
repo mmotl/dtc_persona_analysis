@@ -44,6 +44,21 @@ schema_sql = schema_sql.replace(
 )
 print(schema_sql)
 
+# Robustly add the "customer_id" as a SERIAL PRIMARY KEY.
+# We find the first '(' and insert the column definition right after it.
+first_paren_index = schema_sql.find('(')
+if first_paren_index != -1:
+    # The new column to be inserted
+    pk_column_definition = '\n    customer_id SERIAL PRIMARY KEY,'
+    # Reconstruct the string with the new column
+    schema_sql = (
+        schema_sql[:first_paren_index + 1] +
+        pk_column_definition +
+        schema_sql[first_paren_index + 1:]
+    )
+print(schema_sql)
+
+
 # 2. Check if the table already exists in the database
 if not inspector.has_table(table_name):
     print(f"Table {table_name} does not exist. Creating it now...")
