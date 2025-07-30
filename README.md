@@ -1,19 +1,20 @@
-# DTC Persona Pipeline
+# DTC Persona Analysis - Complete MLOps Pipeline
 *MLOps infrastructure for customer persona analysis and segmentation mapping*
 
 <!-- This project is a complete MLOps pipeline for creating customer personas for a Direct-to-Consumer (DTC) business. It uses a K-Means clustering model to segment customers based on their data. The entire environment is containerized with Docker Compose and uses modern MLOps tools for orchestration, experiment tracking, and data monitoring.-->
 
 ![Codehase](./images/bunny2.png)
+<br>
+<br>
 
 ### First things first:
-For the MLOps Zoomcamp, I made a brief guideline in the evaluation.md ([click here](./evaluation.md)) to help you navigate the project evaluation! Hope, it helps ...
+For the `MLOps Zoomcamp`, I made a brief guideline in the evaluation.md ([click here](./evaluation.md)) to help you navigate the project evaluation!  
+Hope, it helps ...  
+<br>
+<br>
 
-<!--
-### Objective
-With this project, I am re-creating a task I got as a market researcher back in the 2010s.  
-At that time, I solved it with some self-written distance metrics in MS Excel.  
-Now, I'm getting my hand at it again in quite a different tech stack ... :)
--->
+
+The **DTC Persona Analysis** repository is a complete **MLOps infrastructure** designed to solve a real-world customer segmentation and persona labeling problem for marketing purposes. This project demonstrates a production-ready machine learning pipeline that automatically classifies new customers into pre-existing marketing personas.
 
 ### Problem Statement  
 <!--
@@ -27,10 +28,7 @@ Now, I'm getting my hand at it again in quite a different tech stack ... :)
 - well and then, the next step is to design a model for newly collected data to label it. 
 - This is what this project revolves around.
 -->
-```
-TL;DR:  
-This project implements a full workflow to automatically label customer data with pre-defined marketing personas. The model works by predicting the closest pre-defined persona centroid, and includes a monitoring to re-train and deploy a new model when new incoming data no longer meaningfully matches the personas.
-````
+**TL;DR:** This project implements a full workflow to automatically label customer data with pre-defined marketing personas. The model works by predicting the closest pre-defined persona centroid, and includes monitoring to re-train and deploy a new model when the personas no longer match the incoming data.
 
 1. Background & context  
 A key client has segmented its customer base using a cluster analysis performed by a third-party provider. These clusters are the foundation of their core marketing personas (e.g., "Sustainable Steve," "Eco-Conscious Haley") based on the mean of their demographic features. The mathematical definition for each persona is provided by a specific cluster centroid in a multi-dimensional feature space.
@@ -48,6 +46,9 @@ Core project assets we got provided (*in this project, since the original data i
 - Feature list: We have the definitive list of features (x1, x2, ..., x10) that define the persona space. These features will be incorporated into our survey instruments.
 - Persona cluster centroids: We have received the numerical centroid for each persona. A centroid is a vector representing the mathematical average of all data points within a cluster, effectively serving as the "perfect example" or ideal center for that persona.  
 *In this project, this is my ground truth for building new artificial data to be labelled.* 
+
+
+For a deeper dive into the model and data design, view [modelling_thoughts.md](01_model/modelling_thoughts.md)  
 
 ## Core Features
 *   **Containerized Environment:** All core services are orchestrated via **Docker Compose** for easy setup and consistent environments.

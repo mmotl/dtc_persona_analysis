@@ -41,7 +41,7 @@ docker_stack:
 	@docker-compose -f ${COMPOSE_FILE} up -d
 
 # Target to create and ingest data using the create_data.py script
-INGEST_TABLE=customer_features_test2
+INGEST_TABLE=customer_features_test3
 create_data:
 	@echo "Creating data and ingesting into postgres database ..."
 	cd 00_create_data && python create_data_wlabel.py 500 2 42 1 features_01_2025.csv
