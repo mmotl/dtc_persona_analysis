@@ -29,7 +29,7 @@ Now, I'm getting my hand at it again in quite a different tech stack ... :)
 -->
 ```
 TL;DR:  
-This project builds a system to automatically label new customers data with the a client's existing marketing personas. The model works by predicting the closest pre-defined persona centroid, and includes a monitoring to re-train and deploy a new model when the personas no longer match the incoming data.
+This project implements a full workflow to automatically label customer data with pre-defined marketing personas. The model works by predicting the closest pre-defined persona centroid, and includes a monitoring to re-train and deploy a new model when new incoming data no longer meaningfully matches the personas.
 ````
 
 1. Background & context  
