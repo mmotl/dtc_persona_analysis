@@ -195,6 +195,7 @@ cython_debug/
 
 # data directory, used for storing data files
 data/
+.variables/
 
 # macOS system file, used to store custom attributes of a folder
 .DS_Store
