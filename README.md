@@ -63,9 +63,10 @@ The diagram can be adapted easily via the mermaid code in `dfd.mermaid`, eg. in 
     - **CloudBeaver** provides a web UI for easy database access.
 <br>  
 <br>  
----  
+---    
+
 ### License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT license](https://opensource.org/licenses/MIT).  
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
