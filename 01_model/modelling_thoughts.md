@@ -21,7 +21,7 @@ When working with K-Means clustering, I face a fundamental challenge: **how do I
 
 ### My Solution: Silhouette-Inertia-Ratio
 
-I developed a custom metric that combines two complementary clustering quality measures:
+I developed a custom metric that combines two complementary clustering quality measures - you can find this as logged metric in MLFlow:
 
 ```python
 silhouette_inertia_ratio = (silhouette_score * 1000) / model.inertia_
