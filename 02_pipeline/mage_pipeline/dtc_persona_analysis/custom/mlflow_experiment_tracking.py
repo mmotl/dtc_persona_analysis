@@ -45,7 +45,9 @@ def transform_custom(data, *args, **kwargs):
     # Enable scikit-learn autologging
     mlflow.sklearn.autolog()
 
-    X = data['reference']
+    # Toggle here based on what model you want to create
+#    X = data['reference']
+    X = data['current']
 
     # Experiment tracking
 

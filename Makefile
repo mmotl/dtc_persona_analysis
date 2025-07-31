@@ -52,7 +52,7 @@ create_data:
 	cd 00_create_data && python ingest.py $(INGEST_TABLE) features_03_2025.csv
 	cd 00_create_data && python create_data.py 500 2 42 4 features_04_2025.csv
 	cd 00_create_data && python ingest.py $(INGEST_TABLE) features_04_2025.csv
-	cd 00_create_data && python create_data.py 500 2 42 4 features_05_2025.csv
+	cd 00_create_data && python create_data.py 500 2 42 5 features_05_2025.csv
 	cd 00_create_data && python ingest.py $(INGEST_TABLE) features_05_2025.csv
 
 # Declare tf_create as a phony target (not a real file)
