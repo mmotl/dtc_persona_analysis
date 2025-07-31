@@ -8,16 +8,16 @@
 <br>
 
 ### First things first:
-For the `MLOps Zoomcamp`, I made a brief guideline in the evaluation.md ([click here](./evaluation.md)) to help you navigate the project evaluation!  
+For the `MLOps Zoomcamp`, I made a brief guideline in the [evaluation.md](./evaluation.md) to help you navigate the project evaluation!  
 Hope, it helps ...  
 <br>
 <br>
 
-
-The **DTC Persona Analysis** repository is a complete **MLOps infrastructure** designed to solve a real-world customer segmentation and persona labeling problem for marketing purposes. This project demonstrates a production-ready machine learning pipeline that automatically classifies new customers into pre-existing marketing personas.
-
+**TL;DR:**  
+The `DTC Persona Analysis` repository provides a complete `MLOps infrastructure` to address a real-world customer segmentation challenge. This project demonstrates a production-ready machine learning pipeline that automatically classifies new customers into pre-existing marketing personas by matching their data to predefined cluster centroids.
 ### Problem Statement  
 <!--
+
 - One of the companies we conducted market research surveys for got their own customer base clustered by a third-party provider.
 - The clusters were used for the creation of so-called personae, used in marketing based on their central demographics and consumer behavior.  
 - Imagine these clusters as "Sustainable Steve": The Forward-Thinking Business Leader" or "Eco-Conscious Haley": The Affluent, Sustainable Lifestyle Adopter ... ;)
@@ -31,7 +31,7 @@ The **DTC Persona Analysis** repository is a complete **MLOps infrastructure** d
 **TL;DR:** This project implements a full workflow to automatically label customer data with pre-defined marketing personas. The model works by predicting the closest pre-defined persona centroid, and includes monitoring to re-train and deploy a new model when the personas no longer match the incoming data.
 
 1. Background & context  
-A key client has segmented its customer base using a cluster analysis performed by a third-party provider. These clusters are the foundation of their core marketing personas (e.g., "Sustainable Steve," "Eco-Conscious Haley") based on the mean of their demographic features. The mathematical definition for each persona is provided by a specific cluster centroid in a multi-dimensional feature space.
+A key client has segmented its customer base using a cluster analysis performed by a third-party provider. These clusters are the foundation of their core marketing personas (e.g., "Sustainable Steve: The Forward-Thinking Business Leader" or "Eco-Conscious Haley: The Affluent, Sustainable Lifestyle Adopter") based on the mean of their demographic features. The mathematical definition for each persona is provided by a specific cluster centroid in a multi-dimensional feature space.
 
 2. Core challenge  
 The client has tasked us with building a system to classify new participants from our ongoing market research surveys into their pre-existing persona framework. The challenge is not to recreate the clustering, but to operationalize the labelling of new data points against the static, pre-defined cluster centroids provided by the original vendor.
@@ -48,7 +48,7 @@ Core project assets we got provided (*in this project, since the original data i
 *In this project, this is my ground truth for building new artificial data to be labelled.* 
 
 
-For a deeper dive into the model and data design, view [modelling_thoughts.md](01_model/modelling_thoughts.md)  
+View [modelling_thoughts.md](01_model/modelling_thoughts.md) for a deeper dive into the model and data design.
 
 ## Core Features
 *   **Containerized Environment:** All core services are orchestrated via **Docker Compose** for easy setup and consistent environments.
@@ -204,17 +204,24 @@ make gunicorn
 
 ### Running a Prediction
 
-You can use the provided script to send a request to the prediction service.
+You can either use the [03_deployment/test_gunicorn.py](test_gunicorn.py) script to send a request to the GUNICORN prediction service (script has some mock data inside).
 
 ```bash
 cd /03_deployment
-python test_gunicorn.py # this runs a test with 3 new observations to be labeled
+python test_gunicorn.py
 ```
 
-### And there we go.  
+or you can use the `parameterized` batch prediction script [03_deployment/batch_predict_from_db.py](batch_predict_from_db.py).  
+It fetches data from the database based on the given parameters and writes the prediction back to the database in column `persona`:  
+*example: python batch_predict_from_db.py 2025 4 customer_features*
 
-+++
-+++
+```bash
+cd 03_deployment
+python batch_predict_from_db.py <year> <month> <table_name>
+```
+(have in mind the data in the database is from 01-2025 to 05-2025, with the drifted fraction of the data in the 03-2025)
+
+### And there we go. Happy predicting! :)
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
