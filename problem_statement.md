@@ -1,3 +1,4 @@
+### Problem Statement
 1. Background & context  
 A key client has segmented its customer base using a cluster analysis performed by a third-party provider. These clusters are the foundation of their core marketing personas (e.g., "Sustainable Steve: The Forward-Thinking Business Leader" or "Eco-Conscious Haley: The Affluent, Sustainable Lifestyle Adopter") based on the mean of their demographic features. The mathematical definition for each persona is provided by a specific cluster centroid in a multi-dimensional feature space.
 
