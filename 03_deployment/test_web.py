@@ -48,7 +48,8 @@ if __name__ == "__main__":
     # Predict labels for the sample data via the Flask app
     response = requests.post(
         # "http://localhost:9696/predict", json=features.to_dict(orient="records") # flask
-        "http://0.0.0.0:9797/predict", json=features.to_dict(orient="records") # gunicorn
+        "http://0.0.0.0:9797/predict",
+        json=features.to_dict(orient="records"),  # gunicorn
     )
     print(f"status code: {response.status_code}")
     print("prediction:", response.json())

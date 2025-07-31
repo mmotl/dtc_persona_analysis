@@ -8,13 +8,14 @@ blocks:
     export_write_policy: replace
   downstream_blocks:
   - mlflow_experiment_tracking
+  - telegram_no_changes
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
   name: py_features_only
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: transformer
   upstream_blocks:
@@ -39,6 +40,22 @@ blocks:
   - py_features_only
   uuid: mlflow_experiment_tracking
 - all_upstream_blocks_executed: false
+  color: blue
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: telegram_no_changes
+  retry_config: null
+  status: updated
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - py_features_only
+  uuid: telegram_no_changes
+- all_upstream_blocks_executed: false
   color: teal
   configuration: {}
   downstream_blocks:
@@ -49,7 +66,7 @@ blocks:
   language: python
   name: mlflow_register_best_model
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: custom
   upstream_blocks:
@@ -148,6 +165,22 @@ cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
 conditionals:
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: monitoring_dataset_no_drift
+  retry_config: null
+  status: updated
+  timeout: null
+  type: conditional
+  upstream_blocks:
+  - telegram_no_changes
+  uuid: monitoring_dataset_no_drift
 - all_upstream_blocks_executed: false
   color: null
   configuration: {}

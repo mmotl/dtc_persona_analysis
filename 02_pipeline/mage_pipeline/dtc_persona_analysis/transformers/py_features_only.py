@@ -20,11 +20,15 @@ def transform(data, data2, *args, **kwargs):
     Returns:
         Anything (e.g. data frame, dictionary, array, int, str, etc.)
     """
+    n_features = 10
+    columns_to_keep = ["x" + str(i) for i in range(1, n_features+1)]
     # Specify your transformation logic here
     df_reference = pd.DataFrame(data)
-    df_reference = df_reference.drop(columns='date')
+#    df_reference = df_reference.drop(columns=['date', 'persona'])
+    df_reference = df_reference[columns_to_keep]
     df_current = pd.DataFrame(data2)
-    df_current = df_current.drop(columns='date')
+#    df_current = df_current.drop(columns=['date', 'persona'])
+    df_current = df_current[columns_to_keep]
     return {
         'reference': df_reference,
         'current': df_current

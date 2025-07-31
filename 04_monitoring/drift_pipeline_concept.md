@@ -16,8 +16,8 @@
  (No Drift)                                                        V
       |                                                     [Step 5: Log with MLflow]
       V                                                            |
-[End Pipeline / Log Status]                                        V
-                                                              [Step 6: Register New Model]
+[End Pipeline]                                        V
+                                                              [Step 6: Register New Model and Promote]
                                                                    |
                                                                    V
-                                                              [Step 7: Deploy (Optional)]
+                                                              [Step 7: Deploy with Gunicorn]

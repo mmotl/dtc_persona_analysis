@@ -30,7 +30,7 @@ def export_data(data, *args, **kwargs):
 
     try:
         # Get the latest versions of the registered model
-        latest_versions = client.get_latest_versions(name=model_name, stages=["Production"])
+        latest_versions = client.get_latest_versions(name=model_name, stages=["None"])
 
         # The result is a list, so we get the first element
         if latest_versions:

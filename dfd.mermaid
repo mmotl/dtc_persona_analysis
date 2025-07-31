@@ -1,48 +1,60 @@
 ---
-# title: DTC Persona Pipeline
+# DTC Persona Pipeline
 config:
     theme: dark
     layout: elk
 ---
 graph TD
+    %% Main infrastructure blocks
     subgraph "Local Machine"
         A[TERRAFORM script]
-        H[prediction request script]
+        H[parameterized <br> batch prediction script]
     end
 
     subgraph "Google Cloud Platform"
-        B[GCS bucket]
+        B[GCS bucket for artifacts]
     end
 
     subgraph "Docker Compose Stack"
-        C["<div style='text-align: left;'>PostgreSQL database<br/>  - model registry<br/>  - customer database</div>"]
-        
-        subgraph E [Mage Pipeline]
-            
-            J[Transform] 
-            --> 
-            K["<div style='text-align: left;'>EVIDENTLY<br/>  - monitoring</div>"]
-            --"if data drift"--> 
-            D["<div style='text-align: left;'>MLflow tracking server<br/>  - model retraining<br/>  - return best run</div>"]
-        end
+        C["PostgreSQL<br/>• model registry<br/>• customer database"]
         F[CloudBeaver UI]
+        
+        subgraph "MAGE Pipeline"
+            J[Transform] --> K["EVIDENTLY<br/>• monitoring"]
+            D["MLFLOW Tracking Server<br/>• manages model lifecycle"]
+        end
+
+    end
+    
+    subgraph "GUNICORN"
+        G[GUNICORN web service]
+    end 
+    
+    subgraph "External Service"
+        L["TELEGRAM<br/>• drift notifications
+                        • retraining notifications"]
     end
 
-    subgraph "Docker Container"
-        G[Gunicorn Web Service]
-    end
+    %% Outputs
+    I(("<div style='text-align: center;'>predicted<br/>persona labels</div>"))
 
-    I(("<div style='text-align: left;'>predicted<br/>labels</div>"))
 
-    A -->|"provides"| B
+    %% Connections
     
-    D --"artifacts"--> B
-    D --"register model and<br/>promote to production"--> C
-    
-    F --"client access"--> C
-    C --"new customer data<br/>reference customer data"--> J
+    %% --- Infrastructure & Model Management Flow ---
+    A --"provisions<br>cloud storage"--> B
+    F --"db client access"--> C
+    C --"reads customer data"--> J
+    K --"if data drift"--> D
+    D --"retrains & logs artifacts"--> B
+    D --"registers best model"--> C
+    D~~~C
+    K --"sends alert"--> L
 
-    H ----> G
-    C --"production model"--> G
 
-    G --"runs k-means model"--> I
+    %% --- Batch Prediction Flow (Deduplicated) ---
+    D -- "loads production model" --> G
+    H -- "queries new data from db" --> C
+    C -- "provides data" --> G
+    G -- "runs prediction" --> I
+    I -- "ingestion<br>add labels to new data" --> C

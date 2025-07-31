@@ -2,9 +2,10 @@ from mage_ai.settings.repo import get_repo_path
 from mage_ai.io.config import ConfigFileLoader
 from mage_ai.io.postgres import Postgres
 from os import path
-if 'data_loader' not in globals():
+
+if "data_loader" not in globals():
     from mage_ai.data_preparation.decorators import data_loader
-if 'test' not in globals():
+if "test" not in globals():
     from mage_ai.data_preparation.decorators import test
 
 import pandas as pd
@@ -20,15 +21,14 @@ def load_data_from_postgres(*args, **kwargs):
 
     Docs: https://docs.mage.ai/design/data-loading#postgresql
     """
-    user = os.getenv('POSTGRES_USER')
-    password = os.getenv('POSTGRES_PASSWORD')
-    database = os.getenv('POSTGRES_DBNAME')
-    host = os.getenv('POSTGRES_HOST')
-    port = os.getenv('POSTGRES_PORT')
+    user = os.getenv("POSTGRES_USER")
+    password = os.getenv("POSTGRES_PASSWORD")
+    database = os.getenv("POSTGRES_DBNAME")
+    host = os.getenv("POSTGRES_HOST")
+    port = os.getenv("POSTGRES_PORT")
 
     db_uri = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
     engine = create_engine(db_uri)
-
 
     df = pd.read_sql("SELECT * FROM test_ref", con=engine)
     df.head(5)
@@ -41,4 +41,4 @@ def test_output(output, *args) -> None:
     """
     Template code for testing the output of the block.
     """
-    assert output is not None, 'The output is undefined'
+    assert output is not None, "The output is undefined"
