@@ -1,4 +1,4 @@
-# Makefile for running the MLflow server
+# Makefile for running local MLflow server
 
 .PHONY: server
 mlflowserver:

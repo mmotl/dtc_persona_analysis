@@ -1,5 +1,3 @@
-Excellent question. This custom score is a clever way to combine two standard clustering metrics into a single, more insightful value. Here's a breakdown of the reasoning behind it.
-
 ### The Core Idea: Creating a Single "Goodness" Score, inspired by Dunn-Index
 
 The score `silhouette * 1000 / model.inertia_` is a **custom heuristic** designed to balance the trade-off between two different goals in clustering:
