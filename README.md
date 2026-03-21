@@ -8,12 +8,6 @@
   <i>(fig. A: this is how I envisioned myself in long nights of coding)</i>
 </p>
 
-### First things first:
-For the `MLOps Zoomcamp` evaluation, I made a brief guideline in the [evaluation.md](./evaluation.md) to help you navigate the project!  
-I hope, it supports you!
-<br>
-<br>
-
 ### **TL;DR:**  
 The `DTC Persona Analysis` repository provides a complete `MLOps infrastructure` to address a real-world customer segmentation challenge. This project demonstrates a production-ready machine learning pipeline that automatically classifies new customers into pre-existing marketing personas by matching their data to predefined cluster centroids, and includes monitoring to re-train and deploy a new model when the personas no longer match the incoming data.
 <br>  
